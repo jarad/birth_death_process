@@ -7,18 +7,24 @@ shinyUI(pageWithSidebar(
   
   sidebarPanel(
     #style="min-width:235px;max-width:275px",
-    numericInput('rate', 'Rate (R)', value=1),
-    numericInput('t', 'End time for simulation (T)', value=100),
-    numericInput('n_sims', 'Number of simulations (N)', value=5)#,
+    selectInput('queueing_system', 'Queueing System (Q)', 
+                list('M/M/Inf' = 'mmi')),
+    numericInput('birth_rate', 'Birth Rate (B)', value=1),
+    numericInput('death_rate', 'Death Rate (D)', value=1),
+    numericInput('t', 'End time for simulation (T)', value=10),
+    numericInput('n_sims', 'Number of simulations (N)', value=2)#,
     #submitButton('Simulate.')
   ),
     
   mainPanel(
     tabsetPanel(
-      tabPanel('Simulation',          plotOutput('simulation')),
-      tabPanel('Inter-arrival times', 
-               checkboxInput('combine_sims', 'Combine inter-arrival times across simulations?', value=FALSE),
-               plotOutput('interarrival')),
+      tabPanel('Simulations',          plotOutput('simulation')),
+#       tabPanel('Birth times', 
+#                checkboxInput('combine_birth_times', 'Combine birth times across simulations?', value=FALSE),
+#                plotOutput('interarrival')),
+#       tabPanel('Death times', 
+#                checkboxInput('combine_death_times', 'Combine death times across simulations?', value=FALSE),
+#                plotOutput('interarrival')),
       tabPanel('Help', includeMarkdown('help.md'))
     )
   )
