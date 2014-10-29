@@ -6,13 +6,16 @@ library(ggplot2)
 shinyServer(function(input,output) {
   d <- reactive({
     B = input$birth_rate
-    D = input$death_rate
     o = rdply(input$n_sims, {
       t = tt = 0
       X = Xt = 0
       while(t < input$t) {
-        t = t + rexp(1, B + D * X)
-        X = X+sample(c(-1,1), 1, prob = c(D * X, B)/(B + D * X))
+        D = switch(input$queueing_system,
+                   'mmk' = input$death_rate * input$k,
+                   'mmi' = input$death_rate * X)
+        D = ifelse(X, D, 0)
+        t = t + rexp(1, B + D)
+        X = X+sample(c(-1,1), 1, prob = c(D, B)/(B + D))
         tt = c(tt,t)
         Xt = c(Xt,X)
       }
