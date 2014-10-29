@@ -3,7 +3,7 @@ require(markdown)
 
 shinyUI(pageWithSidebar(
   
-  headerPanel("Simulating a Poisson Process"),
+  headerPanel("Simulating a Birth-Death Process (Queueing System)"),
   
   sidebarPanel(
     #style="min-width:235px;max-width:275px",
