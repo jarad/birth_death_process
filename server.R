@@ -8,18 +8,20 @@ shinyServer(function(input,output) {
     B = input$birth_rate
     o = rdply(input$n_sims, {
       t = tt = 0
-      X = Xt = 0
+      X = Xt = input$initial_state
       while(t < input$t) {
         D = switch(input$queueing_system,
                    'mmk' = input$death_rate * input$k,
-                   'mmi' = input$death_rate * X)
+                   'mmi' = input$death_rate * X,
+                   'pp'  = 0)
         D = ifelse(X, D, 0)
         t = t + rexp(1, B + D)
+        if (t>input$t) break
         X = X+sample(c(-1,1), 1, prob = c(D, B)/(B + D))
         tt = c(tt,t)
         Xt = c(Xt,X)
       }
-      data.frame(time=tt, state=Xt)
+      data.frame(time=c(tt,input$t), state=c(Xt,X))
     })
     o$Simulation = factor(o$.n)
     o
